@@ -47,10 +47,92 @@
     .secondary-article img { width: 100%; height: 150px; object-fit: cover; margin-bottom: 0.5rem; }
     .secondary-article h3 { font-size: 1.2rem; margin-bottom: 0.5rem; font-family: 'Times New Roman', Times, serif; }
     .secondary-article p { font-size: 0.95rem; color: #333; font-family: 'Times New Roman', Times, serif; }
+    @media (max-width: 768px) {
+  header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .top-bar {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .masthead-title {
+    font-size: 2.5rem;
+  }
+
+  nav.menu {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 0.5rem;
+  }
+
+  nav.menu a {
+    font-size: 1rem;
+    padding: 0.5rem;
+  }
+
+  .leaderboard, .billboard-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .billboard {
+    width: 45%;
+  }
+
+  .main-content {
+    flex-direction: column;
+  }
+
+  .featured-article, .secondary-articles {
+    width: 100%;
+  }
+
+  .featured-article h1 {
+    font-size: 2.5rem;
+  }
+
+  .slogan {
+    font-size: 1rem;
+    padding: 0.2rem 0.8rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .masthead-title {
+    font-size: 2rem;
+  }
+
+  nav.menu {
+    flex-direction: column;
+  }
+
+  nav.menu a {
+    display: block;
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .featured-article img {
+    max-height: 250px;
+  }
+
+  .secondary-article img {
+    height: 120px;
+  }
+}
+
+
   </style>
 </head>
 <body>
-
   <header>
     <div class="top-bar">
       <div class="social-icons">
@@ -89,8 +171,23 @@
       <div class="billboard"><video src="" controls muted></video></div>
       <div class="billboard"><video src="" controls muted></video></div>
     </div>
-  </section>
 
+   <div id="fecha-hora" style="text-align: left; font-size: 18px; padding-left: 25px; font-weight: bold; margin-top: 18px;"></div>
+
+    <script>
+      function actualizarFechaHora() {
+        const ahora = new Date();
+        const opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const fecha = ahora.toLocaleDateString('es-AR', opciones);
+        const hora = ahora.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+        document.getElementById('fecha-hora').innerHTML = `Edición: ${fecha} – ${hora}`;
+      }
+    
+      actualizarFechaHora();
+      setInterval(actualizarFechaHora, 60000); // actualiza cada minuto
+    </script>
+
+  </section>
   <main class="main-content">
     <section class="featured-article">
       <h1>El Futuro de la Energía Renovable en Neuquén.</h1>
