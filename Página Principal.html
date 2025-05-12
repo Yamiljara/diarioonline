@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>airesnuevosNQN</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Times New Roman', Times, serif; background-color: #f5f5f0; display: flex; flex-direction: column; min-height: 100vh; }
+        header {
+            background-color: #f5f5f0;
+            border-bottom: 1px solid #999;
+            width: 100%;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 1rem; flex-wrap: wrap; width: 100%; }
+        .social-icons {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.2rem;
+            width: 100%;
+            justify-content: center;
+        }
+        .social-icons a { text-decoration: none; font-size: 1.2rem; color: #333; margin: 0 0.4rem; transition: color 0.2s; }
+        .social-icons a:hover { color: #080202; }
+        .weather { font-size: 0.9rem; color: #333; margin-bottom: 0; width: 100%; display: flex; justify-content: center; }
+        .dollar { font-size: 0.9rem; color: #333; margin-right: auto; margin-left: 0; }
+        .masthead { text-align: center; padding: 0.2rem 0 0.5rem; width: 100%; }
+        .masthead-title { font-family: 'Playfair Display', serif; font-size: 4rem; font-weight: 700; text-transform: uppercase; }
+        .brand { color: #ff0000; }
+        .station { color: #000; }
+        .slogan-container { text-align: center; margin-bottom: 1rem; width: 100%; }
+        .slogan { font-size: 1.1rem; font-style: italic; color: white; font-weight: bold; background: #100101; display: inline-block; padding: 0.3rem 1rem; border-radius: 0.3rem; }
+        nav.menu {
+            display: flex;
+            background-color: #ff0000;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 1rem 0;
+            width: 100%;
+            margin: auto;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        nav.menu a { color: #ffffff; text-decoration: none; margin: 0 1rem; font-weight: bold; font-size: 1.1rem; }
+        nav.menu a:hover { text-decoration: underline; }
+        .ads {
+            max-width: 1200px;
+            margin: 4rem auto 3rem auto;
+            display: grid;
+            gap: 3rem;
+            position: relative;
+        }
+        .leaderboard {
+            width: 100%;
+            height: 150px;
+            background: #000000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #ccc;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        .billboard-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+        }
+        .billboard { height:180px; background:white; display:flex; justify-content:center; align-items:center; border:1px solid #ccc; box-shadow:0 4px 8px rgba(0,0,0,0.2); }
+        .ads video { width: 100%; height: 100%; object-fit: cover; }
+        .main-content { max-width: 1200px; margin: 2rem auto; display: flex; gap: 2rem; padding: 0 1rem; flex: 1; }
+        .featured-article { width: 65%; display: flex; flex-direction: column; position: relative; }
+        .featured-article h1 { font-size: 4rem; color: #000; margin-bottom: 0.5rem; font-family: 'Times New Roman', Times, serif; }
+        .featured-article p { font-size: 1.3rem; line-height: 1.6; color: #000; font-weight: normal; margin-bottom: 0.5rem; }
+        .featured-article img { width: 100%; max-height: 400px; object-fit: cover; margin: 1.5rem 0; }
+        .additional-news { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; }
+        .additional-article { background: white; padding: 1rem; border: 1px solid #ccc; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .additional-article h3 { font-size: 1.2rem; margin-bottom: 0.5rem; font-family: 'Times New Roman', Times, serif; }
+        .additional-article p { font-size: 1rem; color: #333; font-family: 'Times New Roman', Times, serif; }
+        .secondary-articles { width: 30%; display: grid; gap: 1.5rem; }
+        .secondary-article { background: white; padding: 1rem; border: 1px solid #ccc; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .secondary-article img { width: 100%; height: 150px; object-fit: cover; margin-bottom: 0.5rem; }
+        .secondary-article h3 { font-size: 1.2rem; margin-bottom: 0.5rem; font-family: 'Times New Roman', Times, serif; }
+        .secondary-article p { font-size: 0.95rem; color: #333; font-family: 'Times New Roman', Times, serif; }
+
+        .menu-toggle {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.6rem 1rem;
+            text-align: center;
+            background-color: #333;
+            color: white;
+            position: absolute;
+            top: 0.5rem;
+            left: 0.5rem;
+            z-index: 101;
+            border-radius: 0.3rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            transition: background-color 0.3s ease;
+        }
+
+        .menu-toggle:hover {
+            background-color: #555;
+        }
+
+        .main-menu {
+            display: flex;
+            background-color: #ff0000;
+            padding: 0;
+            margin: 0 auto;
+            text-align: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .main-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .main-menu ul li {
+            display: inline-block;
+            margin: 0.5rem 1rem;
+        }
+
+        .main-menu ul li a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .main-menu {
+                display: none;
+                flex-direction: column;
+            }
+
+            .main-menu.active {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .main-menu ul {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .main-menu ul li {
+                display: block;
+                margin: 0.5rem 0;
+            }
+        }
+
+
+        @media (max-width: 768px) {
+            header {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .top-bar {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .masthead-title {
+                font-size: 2.5rem;
+            }
+
+            nav.menu {
+                display: none;
+                flex-wrap: wrap;
+                justify-content: center;
+                padding: 0.5rem;
+                flex-direction: column;
+            }
+
+            nav.menu.active {
+                display: flex;
+            }
+
+            nav.menu a {
+                font-size: 1rem;
+                padding: 0.5rem;
+                text-align: center;
+            }
+
+            .leaderboard, .billboard-container {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .billboard {
+                width: 45%;
+            }
+
+            .main-content {
+                flex-direction: column;
+            }
+
+            .featured-article, .secondary-articles {
+                width: 100%;
+            }
+
+            .featured-article h1 {
+                font-size: 2.5rem;
+            }
+
+            .slogan {
+                font-size: 1rem;
+                padding: 0.2rem 0.8rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .masthead-title {
+                font-size: 2rem;
+            }
+
+            nav.menu {
+                flex-direction: column;
+            }
+
+            nav.menu a {
+                display: block;
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .featured-article img {
+                max-height: 250px;
+            }
+
+            .secondary-article img {
+                height: 120px;
+            }
+        }
+        .secondary-article img {
+            height: 120px;
+        }
+        .leaderboard {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 150px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .leaderboard iframe, .billboard iframe {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border: none;
+        }
+
+        .current-datetime {
+            font-size: 1.2rem;
+            color: #555;
+            position: absolute;
+            bottom: -2.5rem;
+            left: 10%;
+            margin-top: 2.5rem;
+            z-index: 10;
+        }
+
+        .featured-article {
+            padding-bottom: 0;
+        }
+
+        @media (max-width: 768px) {
+            .current-datetime {
+                padding: 0.3rem 0.5rem;
+                font-size: 0.8rem;
+            }
+        }
+        #weather-container {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            margin: 1rem auto;
+            background-color: transparent;
+            display: flex;
+            justify-content: center;
+            order: 2;
+        }
+
+        #TT_yiJkz1j1jAh8CaGAKAujjzzzDvuAMEj2bdkdkcy5qEj1DEzkD {
+            width: 100%;
+            height: 100%;
+            min-height: 150px;
+        }
+
+        .weather {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: auto;
+            flex-direction: column;
+        }
+
+        footer {
+            background-color: #f5f5f5;
+            color: #555;
+            padding: 1rem;
+            text-align: center;
+            border-top: 1px solid #999;
+            margin-top: 2rem;
+            width: 100%;
+            max-width: 1200px;
+            margin: 2rem auto 0 auto;
+        }
+
+        .footer-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .footer-info p {
+            margin: 0.2rem 0;
+            font-size: 0.9rem;
+        }
+
+        .subscription-button {
+            background-color: #ff6600;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.3rem;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .subscription-button:hover {
+            background-color: #cc5200;
+        }
+
+        @media (max-width: 768px) {
+            .footer-info {
+                align-items: center;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="top-bar">
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+                <a href="#"><i class="fab fa-tiktok"></i></a>
+                <a href="#"><i class="fab fa-x-twitter"></i></a>
+            </div>
+        </div>
+        <div class="masthead">
+            <div class="masthead-title"><span class="brand">airesnuevos</span><span class="station">NQN</span></div>
+        </div>
+        <div class="slogan-container"><div class="slogan">La nueva voz de la noticia</div></div>
+        <div class="menu-toggle" id="menu-toggle" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </div>
+        <nav class="main-menu" id="menu">
+    <ul>
+ <li><a href="#portada-section">Portada</a></li>
+  <li><a href="#ultimas-noticias-section">últimas noticias</a></li>
+  <li><a href="#regionales-section">Regionales</a></li>
+  <li><a href="#provinciales-section">Provinciales</a></li>
+  <li><a href="#nacionales-section">Nacionales</a></li>
+  <li><a href="#internacionales-section">Internacionales</a></li>
+  <li><a href="#deporte-section">Deporte</a></li>
+  <li><a href="#cultura-section">Cultura</a></li>
+  <li><a href="#politica-section">Política</a></li>
+  <li><a href="#sociedad-section">Sociedad</a></li>
+</ul>
+    </header>
+
+   <section class="ads">
+    <div class="leaderboard">
+        <iframe src="https://player.vimeo.com/video/1075900457?title=0&amp;byline=0&amp;portrait=0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479&amp;autoplay=1&amp;loop=1&amp;muted=1&amp;background=1"
+                width="100%"
+                height="150"
+                frameborder="0"
+                allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
+                loading="lazy"></iframe>
+    </div>
+    <div class="billboard-container">
+        <div class="billboard">
+            <iframe src="https://player.vimeo.com/video/1041789943?share=copy&autoplay=1&loop=1&muted=1" width="100%" height="100%" frameborder="0" loading="lazy"></iframe>
+        </div>
+        <div class="billboard">
+            <iframe src="https://player.vimeo.com/video/TU_VIDEO_2?autoplay=1&amp;loop=1&amp;muted=1&amp;background=1" width="100%" height="100%" frameborder="0" loading="lazy"></iframe>
+        </div>
+        <div class="billboard">
+            <iframe src="https://player.vimeo.com/video/TU_VIDEO_3?autoplay=1&amp;loop=1&amp;muted=1&amp;background=1" width="100%" height="100%" frameborder="0" loading="lazy"></iframe>
+        </div>
+        <div class="billboard">
+            <iframe src="https://player.vimeo.com/video/TU_VIDEO_4?autoplay=1&amp;loop=1&amp;muted=1&amp;background=1" width="100%" height="100%" frameborder="0" loading="lazy"></iframe>
+        </div>
+        <div class="current-datetime" id="live-datetime">Cargando fecha y hora...</div>
+    </div>
+</section>
+
+    <main class="main-content" id="portada-section">
+    <section class="featured-article">
+        <h1>El Futuro de la Energía Renovable en Neuquén.</h1>
+        <p>La transición hacia fuentes de energía renovables está ganando terreno en la provincia de Neuquén. Expertos analizan los beneficios y retos de este cambio en la matriz energética.</p>
+        <img src="https://i.postimg.cc/jjVyGhX9/Imagen-de-Whats-App-2025-04-05-a-las-23-27-25-e4c3a7b1.jpg" alt="Noticia principal sobre energía renovable">
+        <div class="additional-news">
+            <div class="additional-article">
+                <h3>El Impacto de la Tecnología en la Educación en Neuquén</h3>
+                <p>El avance de las herramientas digitales está transformando el sistema educativo, ofreciendo nuevas oportunidades para el aprendizaje remoto.</p>
+            </div>
+                <div class="additional-article">
+                    <h3>Reformas en el Sistema de Salud Provincial</h3>
+                    <p>El gobierno de Neuquén está implementando reformas clave en el sistema de salud para mejorar la atención y la eficiencia en los hospitales.</p>
+                </div>
+                 <div class="additional-article">
+                    <h3>Iniciativa de Movilidad Sustentable en Neuquén</h3>
+                    <p>Se lanza un plan para promover el uso de bicicletas y transporte público eléctrico en la capital.</p>
+                </div>
+                <div class="additional-article">
+                    <h3>Proyecto de Arte Urbano Ilumina la Ciudad</h3>
+                    <p>Artistas locales colaboran en murales que embellecen espacios públicos y fomentan el turismo cultural.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="secondary-articles">
+            <div class="secondary-article">
+                <img src="https://i.postimg.cc/FRsT4YWc/noti2.png" alt="Noticia secundaria sobre política">
+                <h3>Nuevo Proyecto de Ley para Fomentar el Empleo Juvenil</h3>
+                <p>El gobierno provincial presentará un proyecto de ley que busca incentivar la contratación de jóvenes mediante beneficios fiscales para las empresas.</p>
+            </div>
+            <div class="secondary-article">
+                <img src="https://i.postimg.cc/xdgr9nsw/Imagen-de-Whats-App-2025-04-06-a-las-20-40-13-a4e4c14e.jpg" alt="Noticia secundaria sobre deportes">
+                <h3>Neuquén se Prepara para el Torneo de Rugby Nacional</h3>
+                <p>Equipos de toda Argentina se darán cita en Neuquén para disputar el Torneo Nacional de Rugby 2025. Las expectativas son altas.</p>
+            </div>
+            <div class="secondary-article">
+                <h3>Transformación Digital en la Educación Provincial</h3>
+                <p>El gobierno local está implementando nuevas herramientas digitales para mejorar la educación en las escuelas de la región, con un enfoque en la inclusión tecnológica.</p>
+            </div>
+            <div class="secondary-article">
+                <h3>El Crecimiento del Turismo en la Patagonia Argentina</h3>
+               <p>La región patagónica continúa consolidándose como un destino turístico de excelencia, destacándose en actividades al aire libre y ecoturismo.</p>
+            </div>
+            </section>
+    </main>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Últimas Noticias</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos generales */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 20px;
+        }
+
+        .latest-news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .latest-news-grid h2 {
+            grid-column: 1 / -1;
+            text-align: left;
+            font-size: 2.2rem;
+            margin-bottom: 2rem;
+            font-family: 'Playfair Display', serif;
+            color: #222;
+            letter-spacing: -0.02em;
+            font-weight: 700;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 0.5rem;
+            line-height: 1;
+        }
+
+        .news-item {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .news-item:hover {
+            transform: translateY(-0.2rem) scale(1.03);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .news-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 0.5rem 0.5rem 0 0;
+            margin-bottom: 1rem;
+        }
+
+        .news-item-content {
+            padding: 1rem;
+        }
+
+        .news-item h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.75rem;
+            color: #222;
+            font-weight: 600;
+            line-height: 1.3;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .news-item p {
+            font-size: 1rem;
+            color: #444;
+            line-height: 1.6;
+        }
+
+        .ad-slot {
+            width: 100%;
+            height: auto;
+            background-color: #2c3e50;
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1rem;
+            color: #fff;
+            border-radius: 0.5rem;
+            border: 1px solid #e0e0e0;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            padding: 1rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden; /* Para ocultar el desbordamiento del texto durante la animación */
+        }
+
+        .ad-slot:hover {
+            background-color: #34495e;
+            transform: scale(1.05);
+        }
+
+        .ad-slot h4 {
+            font-size: 1rem;
+            color: #fff;
+            margin-bottom: 0.5rem;
+            font-family: 'nyt-franklin', sans-serif;
+        }
+
+        .ad-slot iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .ad-slot p {
+            font-size: 1.2rem;
+            font-weight: bold;
+            letter-spacing: 0.05em;
+            white-space: nowrap; /* Evitamos que el texto se desborde y pase a la siguiente línea */
+            overflow: hidden;
+            animation: typing 3s steps(60, end) infinite, blink-caret .75s step-end infinite; /* Más rápido: 3s en lugar de 6s */
+        }
+
+        .ad-slot.top {
+            grid-column: 1 / -1;
+            margin-top: 0;
+        }
+
+        .ad-slot.top h4 {
+            font-size: 1.2rem;
+        }
+
+        .ad-slot.top p {
+            font-size: 1.4rem;
+            font-weight: bold;
+        }
+
+        .ad-slot.bottom {
+            grid-column: 1 / -1;
+            margin-top: 2rem;
+        }
+
+        .news-item.featured {
+            display: flex;
+            flex-direction: row;
+            align-items: stretch;
+            gap: 2rem;
+            grid-column: 1 / -1;
+        }
+
+        .news-item.featured img {
+            width: 50%;
+            height: auto;
+            border-radius: 0.5rem 0 0 0.5rem;
+            margin-bottom: 0;
+        }
+
+        .news-item.featured .news-item-content {
+            width: 50%;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .news-item.featured h3 {
+            font-size: 1.5rem;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+
+        .news-item.featured p {
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        /* Estilos para móviles */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 10px;
+            }
+
+            .latest-news-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .latest-news-grid h2 {
+                font-size: 2rem;
+                text-align: center;
+                line-height: 1;
+            }
+
+            .news-item, .ad-slot {
+                grid-column: 1 / -1;
+            }
+
+            .news-item img {
+                height: auto;
+                border-radius: 0.5rem 0.5rem 0 0;
+            }
+
+            .news-item.featured {
+                flex-direction: column;
+            }
+
+            .news-item.featured img {
+                width: 100%;
+                height: auto;
+                margin-bottom: 1rem;
+                border-radius: 0.5rem 0.5rem 0 0;
+            }
+
+            .news-item.featured .news-item-content {
+                width: 100%;
+                padding: 1rem;
+            }
+
+            .ad-slot {
+                height: auto;
+                padding: 1rem;
+                text-align: center;
+            }
+
+            .ad-slot.top {
+                grid-column: 1 / -1;
+                margin-top: 0;
+            }
+
+            .ad-slot.bottom {
+                grid-column: 1 / -1;
+                margin-top: 2rem;
+            }
+        }
+
+        /* Definición de la animación para el efecto de máquina de escribir */
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        /* Definición de la animación para el cursor parpadeante */
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: #fff; }
+        }
+</style>
+</head>
+<body>
+    <div class="container">
+        <section class="latest-news-grid" id="ultimas-noticias-section">
+            <h2>Últimas Noticias</h2>
+            <div class="ad-slot top">
+                <p>PUBLICITATE AQUÍ 2996371067 - EMAIL airesnuevosnqn@hotmail.com</p>
+            </div>
+            <div class="news-item featured">
+                <img src="https://i.postimg.cc/jjVyGhX9/Imagen-de-Whats-App-2025-04-05-a-las-23-27-25-e4c3a7b1.jpg" alt="Noticia 1">
+                <div class="news-item-content">
+                    <h3>Título de la Noticia 1: Energía Renovable</h3>
+                    <p>Descripción breve de la noticia 1. Esta noticia es destacada y ocupa más espacio.</p>
+                </div>
+            </div>
+            <div class="ad-slot">
+                <p>PUBLICITATE AQUÍ 2996371067 - EMAIL airesnuevosnqn@hotmail.com</p>
+            </div>
+            <div class="news-item">
+                <img src="https://i.postimg.cc/FRsT4YWc/noti2.png" alt="Noticia 2">
+                <div class="news-item-content">
+                    <h3>Título de la Noticia 2: Política</h3>
+                    <p>Descripción breve de la noticia 2.</p>
+                </div>
+            </div>
+            <div class="news-item">
+                <img src="https://i.postimg.cc/xdgr9nsw/Imagen-de-Whats-App-2025-04-06-a-las-20-40-13-a4e4c14e.jpg" alt="Noticia 3">
+                <div class="news-item-content">
+                    <h3>Título de la Noticia 3: Deportes</h3>
+                    <p>Descripción breve de la noticia 3.</p>
+                </div>
+            </div>
+            <div class="ad-slot">
+                 <p>PUBLICITATE AQUÍ 2996371067 - EMAIL airesnuevosnqn@hotmail.com</p>
+            </div>
+            <div class="news-item">
+                <img src="https://i.postimg.cc/jjVyGhX9/Imagen-de-Whats-App-2025-04-05-a-las-23-27-25-e4c3a7b1.jpg" alt="Noticia 4">
+                <div class="news-item-content">
+                    <h3>Título de la Noticia 4: Energía</h3>
+                    <p>Descripción breve de la noticia 4.</p>
+                </div>
+            </div>
+            <div class="ad-slot">
+                 <p>PUBLICITATE AQUÍ 2996371067 - EMAIL airesnuevosnqn@hotmail.com</p>
+            </div>
+            <div class="news-item">
+                <img src="https://i.postimg.cc/FRsT4YWc/noti2.png" alt="Noticia 5">
+                <div class="news-item-content">
+                    <h3>Título de la Noticia 5: Nueva Ley</h3>
+                    <p>Descripción breve de la noticia 5.</p>
+                </div>
+            </div>
+            <div class="ad-slot">
+                 <p>PUBLICITATE AQUÍ 2996371067 - EMAIL airesnuevosnqn@hotmail.com</p>
+            </div>
+            <div class="news-item">
+                <img src="https://i.postimg.cc/xdgr9nsw/Imagen-de-Whats-App-2025-04-06-a-las-20-40-13-a4e4c14e.jpg" alt="Noticia 6">
+                <div class="news-item-content">
+                    <h3>Título de la Noticia 6: Rugby</h3>
+                    <p>Descripción breve de la noticia 6.</p>
+                </div>
+            </div>
+            <div class="ad-slot">
+                 <p>PUBLICITATE AQUÍ 2996371067 - EMAIL airesnuevosnqn@hotmail.com</p>
+            </div>
+            <div class="news-item">
+                <img src="https://i.postimg.cc/FRsT4YWc/noti2.png" alt="Noticia 7">
+                <div class="news-item-content">
+                    <h3>Título de la Noticia 7: Ultimas noticias</h3>
+                    <p>Descripción breve de la noticia 7.</p>
+                </div>
+            </div>
+             <div class="news-item">
+                <img src="https://i.postimg.cc/FRsT4YWc/noti2.png" alt="Noticia 8">
+                <div class="news-item-content">
+                    <h3>Título de la Noticia 8: Más noticias</h3>
+                    <p>Descripción breve de la noticia 8.</p>
+                </div>
+            </div>
+            <div class="ad-slot bottom">
+                 <p>PUBLICITATE AQUÍ 2996371067 - EMAIL airesnuevosnqn@hotmail.com</p>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
+
+    <script>
+        function actualizarFechaHora() {
+            const ahora = new Date();
+            const opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            const fechaHoraFormateada = "Edición: " + ahora.toLocaleDateString('es-AR', opciones) + ', ' + ahora.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit', hour12: true });
+            document.getElementById('live-datetime').textContent = fechaHoraFormateada.charAt(0).toUpperCase() + fechaHoraFormateada.slice(1);
+        }
+        setInterval(actualizarFechaHora, 1000);
+        actualizarFechaHora();
+
+        function toggleMenu() {
+            var menu = document.getElementById("menu");
+            menu.classList.toggle("active");
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // No necesitamos la función getWeather ya que el widget se inserta directamente.
+
+            // Widget del dólar (necesitas una API para esto)
+            // fetch('https://api-dolar.com.ar/api/v1/dolares/oficial')
+            //   .then(response => response.json())
+            //   .then(data => {
+            //     if (data) {
+            //       const compra = data.compra;
+            //       const venta = data.venta;
+            //       document.getElementById("dollar").textContent = `Dólar: Compra $${compra}, Venta $${venta}`;
+            //     } else {
+            //       document.getElementById("dollar").textContent = "Error al cargar el dólar";
+            //     }
+            //   })
+            //   .catch(error => {
+            //     console.error('Error al cargar el dólar:', error);
+            //     document.getElementById("dollar").textContent = "Error al cargar el dólar";
+            //   });
+        });
+    </script>
+
+    <footer>
+        <div class="footer-info">
+            <p>Teléfono: +123 456 7890</p>
+            <p>Email: info@example.com</p>
+            <button class="subscription-button">Suscribirse</button>
+        </div>
+    </footer>
+</body>
+</html>
